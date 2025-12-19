@@ -4,6 +4,7 @@ import { login } from '../redux/authSlice'; // Import Redux action
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios'; // <--- Import axios for Backend calls
+import API_BASE_URL from '../config/api';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true); // Toggle between Login & Register
@@ -31,13 +32,13 @@ const Login = () => {
       // 2. Connect to Real Backend
       if (isLogin) {
         // --- LOGIN Logic ---
-        res = await axios.post('http://localhost:5002/api/users/login', { 
+        res = await axios.post(`${API_BASE_URL}/api/users/login`, { 
           email, 
           password 
         });
       } else {
         // --- REGISTER Logic ---
-        res = await axios.post('http://localhost:5002/api/users', { 
+        res = await axios.post(`${API_BASE_URL}/api/users`, { 
           name, 
           email, 
           password,

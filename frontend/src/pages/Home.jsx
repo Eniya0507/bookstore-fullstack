@@ -10,7 +10,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5002/api/books');
+        const { data } = await axios.get('https://bookstore-6afw.onrender.com/api/books');
         setBooks(data);
         
         // Group books by category

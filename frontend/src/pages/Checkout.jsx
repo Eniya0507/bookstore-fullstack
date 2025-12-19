@@ -48,7 +48,7 @@ const Checkout = () => {
       };
       
       // Send to Backend with Authorization header
-      await axios.post('http://localhost:5002/api/orders', orderData, {
+      await axios.post('https://bookstore-6afw.onrender.com/api/orders', orderData, {
         headers: {
           Authorization: `Bearer ${user.token}`
         }
