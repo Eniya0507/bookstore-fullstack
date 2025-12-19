@@ -1,0 +1,85 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import ProductCard from '../components/ProductCard';
+
+const Home = () => {
+  const [books, setBooks] = useState([]);
+  const [booksByCategory, setBooksByCategory] = useState({});
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const { data } = await axios.get('http://localhost:5001/api/books');
+        setBooks(data);
+        
+        // Group books by category
+        const grouped = data.reduce((acc, book) => {
+          const category = book.category || 'Other';
+          if (!acc[category]) acc[category] = [];
+          acc[category].push(book);
+          return acc;
+        }, {});
+        setBooksByCategory(grouped);
+      } catch (error) {
+        console.error('Error fetching books:', error);
+      }
+    };
+    fetchBooks();
+  }, []);
+  return (
+    <div>
+      {/* 1. Hero Section (Banner) */}
+      <div className="bg-gray-900 text-white py-20 px-6 text-center rounded-lg shadow-xl mb-12">
+        <h1 className="text-5xl font-bold mb-4">Welcome to BookStore</h1>
+        <p className="text-xl text-gray-300 mb-8">
+          Discover your next favorite read from our exclusive collection.
+        </p>
+        <Link 
+          to="/shop" 
+          className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition"
+        >
+          Shop Now
+        </Link>
+      </div>
+
+      {/* 2. Features Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 text-center">
+        <div className="p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+          <div className="text-blue-600 text-4xl mb-4">🚀</div>
+          <h3 className="text-xl font-bold mb-2">Fast Delivery</h3>
+          <p className="text-gray-500">Get your books delivered to your doorstep within 24 hours.</p>
+        </div>
+        <div className="p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+          <div className="text-blue-600 text-4xl mb-4">🛡️</div>
+          <h3 className="text-xl font-bold mb-2">Secure Payment</h3>
+          <p className="text-gray-500">100% secure payment gateways with multiple options.</p>
+        </div>
+        <div className="p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+          <div className="text-blue-600 text-4xl mb-4">❤️</div>
+          <h3 className="text-xl font-bold mb-2">Best Quality</h3>
+          <p className="text-gray-500">We ensure the best paper quality for a great reading experience.</p>
+        </div>
+      </div>
+
+      {/* 3. Category-wise Book Sections */}
+      {Object.entries(booksByCategory).map(([category, categoryBooks]) => (
+        <div key={category} className="mb-16">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-800">{category} Books</h2>
+            <Link to={`/shop?category=${category}`} className="text-blue-600 hover:text-blue-800 font-medium">
+              View All →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            {categoryBooks.slice(0, 5).map((book) => (
+              <ProductCard key={book._id} book={book} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Home;
