@@ -17,7 +17,7 @@ const ProductDetails = () => {
     const fetchBook = async () => {
       try {
         // Fetch single book by ID
-        const { data } = await axios.get(`http://localhost:5001/api/books/${id}`);
+        const { data } = await axios.get(`http://localhost:5002/api/books/${id}`);
         setBook(data);
         setLoading(false);
       } catch (error) {

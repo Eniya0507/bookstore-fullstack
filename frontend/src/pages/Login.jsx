@@ -31,13 +31,13 @@ const Login = () => {
       // 2. Connect to Real Backend
       if (isLogin) {
         // --- LOGIN Logic ---
-        res = await axios.post('http://localhost:5001/api/users/login', { 
+        res = await axios.post('http://localhost:5002/api/users/login', { 
           email, 
           password 
         });
       } else {
         // --- REGISTER Logic ---
-        res = await axios.post('http://localhost:5001/api/users', { 
+        res = await axios.post('http://localhost:5002/api/users', { 
           name, 
           email, 
           password,

@@ -14,7 +14,7 @@ const Shop = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5001/api/books');
+        const { data } = await axios.get('http://localhost:5002/api/books');
         setBooks(data);
         setFilteredBooks(data);
         

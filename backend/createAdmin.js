@@ -2,9 +2,28 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const User = require('./models/User');
-const connectDB = require('./config/db');
 
 dotenv.config();
+
+// Connect to database
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI_ATLAS, {
+      serverSelectionTimeoutMS: 5000
+    });
+    console.log('MongoDB Atlas Connected for admin creation ✅');
+  } catch (atlasError) {
+    console.log('Atlas connection failed, trying local MongoDB...');
+    try {
+      await mongoose.connect(process.env.MONGO_URI_LOCAL);
+      console.log('Local MongoDB Connected for admin creation ✅');
+    } catch (localError) {
+      console.error('Both database connections failed:', localError);
+      process.exit(1);
+    }
+  }
+};
+
 connectDB();
 
 const createAdmin = async () => {

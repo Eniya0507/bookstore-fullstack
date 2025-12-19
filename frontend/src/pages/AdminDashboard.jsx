@@ -27,7 +27,7 @@ const AdminDashboard = () => {
   // 1. Fetch Products from Backend
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5001/api/books');
+      const { data } = await axios.get('http://localhost:5002/api/books');
       setProducts(data);
     } catch (error) {
       console.error("Error fetching products", error);
@@ -37,7 +37,7 @@ const AdminDashboard = () => {
   // Fetch Orders from Backend
   const fetchOrders = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5001/api/orders', {
+      const { data } = await axios.get('http://localhost:5002/api/orders', {
         headers: {
           Authorization: `Bearer ${user?.token}`
         }
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5001/api/books');
+        const { data } = await axios.get('http://localhost:5002/api/books');
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products", error);
@@ -59,7 +59,7 @@ const AdminDashboard = () => {
     };
     const loadOrders = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5001/api/orders', {
+        const { data } = await axios.get('http://localhost:5002/api/orders', {
           headers: {
             Authorization: `Bearer ${user?.token}`
           }
@@ -83,7 +83,7 @@ const AdminDashboard = () => {
     e.preventDefault();
     try {
       // Send data to backend
-      await axios.post('http://localhost:5001/api/books', formData);
+      await axios.post('http://localhost:5002/api/books', formData);
       
       toast.success("Book Added Successfully!");
       
@@ -103,7 +103,7 @@ const AdminDashboard = () => {
   const handleDelete = async (id) => {
     if(window.confirm("Are you sure you want to delete this book?")) {
       try {
-        await axios.delete(`http://localhost:5001/api/books/${id}`);
+        await axios.delete(`http://localhost:5002/api/books/${id}`);
         toast.success("Book deleted successfully!");
         fetchProducts(); // Refresh the list
       } catch  {
@@ -115,7 +115,7 @@ const AdminDashboard = () => {
   // Handle stock update
   const handleStockUpdate = async (bookId, newStock) => {
     try {
-      await axios.put(`http://localhost:5001/api/books/${bookId}/stock`, { stock: newStock });
+      await axios.put(`http://localhost:5002/api/books/${bookId}/stock`, { stock: newStock });
       toast.success('Stock updated successfully!');
       fetchProducts();
       setStockUpdates({ ...stockUpdates, [bookId]: '' });
@@ -132,7 +132,7 @@ const AdminDashboard = () => {
   const handleOrderStatusUpdate = async (orderId, newStatus) => {
     console.log('Updating order:', orderId, 'to status:', newStatus);
     try {
-      const response = await axios.put(`http://localhost:5001/api/orders/${orderId}/status`, { status: newStatus }, {
+      const response = await axios.put(`http://localhost:5002/api/orders/${orderId}/status`, { status: newStatus }, {
         headers: {
           Authorization: `Bearer ${user?.token}`
         }
