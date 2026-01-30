@@ -6,11 +6,13 @@ services:
     startCommand: cd backend && npm start
     envVars:
       - key: MONGO_URI
-        value: mongodb://127.0.0.1:27017/bookstore
+        value: mongodb+srv://Eniya:1605@cluster0.0reauxr.mongodb.net/bookstore?retryWrites=true&w=majority&appName=Cluster0
       - key: JWT_SECRET
         value: mysecretkey123
       - key: PORT
         value: 5001
+      - key: NODE_ENV
+        value: production
 
   - type: web
     name: bookstore-frontend
@@ -20,3 +22,5 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://bookstore-backend.onrender.com
+      - key: NODE_ENV
+        value: production
