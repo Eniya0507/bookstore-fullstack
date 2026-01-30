@@ -2,8 +2,9 @@ services:
   - type: web
     name: bookstore-backend
     env: node
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && npm start
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: MONGO_URI
         value: mongodb+srv://Eniya:1605@cluster0.0reauxr.mongodb.net/bookstore?retryWrites=true&w=majority&appName=Cluster0
@@ -17,8 +18,9 @@ services:
   - type: web
     name: bookstore-frontend
     env: node
-    buildCommand: cd frontend && npm install && npm run build
-    startCommand: cd frontend && npm run preview
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm run preview
     envVars:
       - key: VITE_API_URL
         value: https://bookstore-backend.onrender.com
