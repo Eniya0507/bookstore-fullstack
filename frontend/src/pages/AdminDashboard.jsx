@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaBox, FaPlus, FaList, FaTrash } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import API_BASE_URL from '../config/api';
 
 const AdminDashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -27,7 +28,7 @@ const AdminDashboard = () => {
   // 1. Fetch Products from Backend
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get('https://bookstore-6afw.onrender.com/api/books');
+      const { data } = await axios.get(`${API_BASE_URL}/api/books`);
       setProducts(data);
     } catch (error) {
       console.error("Error fetching products", error);
@@ -37,7 +38,7 @@ const AdminDashboard = () => {
   // Fetch Orders from Backend
   const fetchOrders = async () => {
     try {
-      const { data } = await axios.get('https://bookstore-6afw.onrender.com/api/orders', {
+      const { data } = await axios.get(`${API_BASE_URL}/api/orders`, {
         headers: {
           Authorization: `Bearer ${user?.token}`
         }
@@ -51,7 +52,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const { data } = await axios.get('https://bookstore-6afw.onrender.com/api/books');
+        const { data } = await axios.get(`${API_BASE_URL}/api/books`);
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products", error);
@@ -59,7 +60,7 @@ const AdminDashboard = () => {
     };
     const loadOrders = async () => {
       try {
-        const { data } = await axios.get('https://bookstore-6afw.onrender.com/api/orders', {
+        const { data } = await axios.get(`${API_BASE_URL}/api/orders`, {
           headers: {
             Authorization: `Bearer ${user?.token}`
           }
@@ -83,7 +84,7 @@ const AdminDashboard = () => {
     e.preventDefault();
     try {
       // Send data to backend
-      await axios.post('https://bookstore-6afw.onrender.com/api/books', formData);
+      await axios.post(`${API_BASE_URL}/api/books`, formData);
       
       toast.success("Book Added Successfully!");
       
@@ -103,7 +104,7 @@ const AdminDashboard = () => {
   const handleDelete = async (id) => {
     if(window.confirm("Are you sure you want to delete this book?")) {
       try {
-        await axios.delete(`https://bookstore-6afw.onrender.com/api/books/${id}`);
+        await axios.delete(`${API_BASE_URL}/api/books/${id}`);
         toast.success("Book deleted successfully!");
         fetchProducts(); // Refresh the list
       } catch  {
@@ -115,7 +116,7 @@ const AdminDashboard = () => {
   // Handle stock update
   const handleStockUpdate = async (bookId, newStock) => {
     try {
-      await axios.put(`https://bookstore-6afw.onrender.com/api/books/${bookId}/stock`, { stock: newStock });
+      await axios.put(`${API_BASE_URL}/api/books/${bookId}/stock`, { stock: newStock });
       toast.success('Stock updated successfully!');
       fetchProducts();
       setStockUpdates({ ...stockUpdates, [bookId]: '' });
@@ -132,7 +133,7 @@ const AdminDashboard = () => {
   const handleOrderStatusUpdate = async (orderId, newStatus) => {
     console.log('Updating order:', orderId, 'to status:', newStatus);
     try {
-      const response = await axios.put(`https://bookstore-6afw.onrender.com/api/orders/${orderId}/status`, { status: newStatus }, {
+      const response = await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status`, { status: newStatus }, {
         headers: {
           Authorization: `Bearer ${user?.token}`
         }

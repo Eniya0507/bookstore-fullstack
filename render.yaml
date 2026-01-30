@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: bookstore-backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: MONGO_URI
+        value: mongodb://127.0.0.1:27017/bookstore
+      - key: JWT_SECRET
+        value: mysecretkey123
+      - key: PORT
+        value: 5001
+
+  - type: web
+    name: bookstore-frontend
+    env: node
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm run preview
+    envVars:
+      - key: VITE_API_URL
+        value: https://bookstore-backend.onrender.com

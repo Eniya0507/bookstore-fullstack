@@ -1,32 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import ProductCard from '../components/ProductCard';
 
 const Home = () => {
-  const [books, setBooks] = useState([]);
-  const [booksByCategory, setBooksByCategory] = useState({});
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const { data } = await axios.get('https://bookstore-6afw.onrender.com/api/books');
-        setBooks(data);
-        
-        // Group books by category
-        const grouped = data.reduce((acc, book) => {
-          const category = book.category || 'Other';
-          if (!acc[category]) acc[category] = [];
-          acc[category].push(book);
-          return acc;
-        }, {});
-        setBooksByCategory(grouped);
-      } catch (error) {
-        console.error('Error fetching books:', error);
-      }
-    };
-    fetchBooks();
-  }, []);
   return (
     <div>
       {/* 1. Hero Section (Banner) */}
@@ -62,22 +37,10 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 3. Category-wise Book Sections */}
-      {Object.entries(booksByCategory).map(([category, categoryBooks]) => (
-        <div key={category} className="mb-16">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">{category} Books</h2>
-            <Link to={`/shop?category=${category}`} className="text-blue-600 hover:text-blue-800 font-medium">
-              View All →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {categoryBooks.slice(0, 5).map((book) => (
-              <ProductCard key={book._id} book={book} />
-            ))}
-          </div>
-        </div>
-      ))}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-4">Books Coming Soon!</h2>
+        <p className="text-gray-600">Start your backend server to see books.</p>
+      </div>
     </div>
   );
 };

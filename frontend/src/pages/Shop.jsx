@@ -14,7 +14,7 @@ const Shop = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const { data } = await axios.get('https://bookstore-6afw.onrender.com/api/books');
+        const { data } = await axios.get('http://localhost:5001/api/books');
         setBooks(data);
         setFilteredBooks(data);
         
