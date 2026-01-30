@@ -23,6 +23,6 @@ services:
     startCommand: npm run preview
     envVars:
       - key: VITE_API_URL
-        value: https://bookstore-backend.onrender.com
+        value: https://bookstore-fullstack-1.onrender.com
       - key: NODE_ENV
         value: production
