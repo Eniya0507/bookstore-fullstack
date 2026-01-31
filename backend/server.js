@@ -8,6 +8,7 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const bookRoutes = require('./routes/bookRoutes');
 const userRoutes = require('./routes/userRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 dotenv.config();
 connectDB();
@@ -15,7 +16,10 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? true : ['http://localhost:5173', 'http://localhost:3000'],
+  credentials: true
+}));
 
 // Default Route
 app.get('/', (req, res) => {
@@ -26,6 +30,7 @@ app.get('/', (req, res) => {
 app.use('/api/books', bookRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Error Middleware
 app.use(notFound);

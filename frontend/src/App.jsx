@@ -8,6 +8,7 @@ import Cart from './pages/Cart';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import MyOrders from './pages/MyOrders';
+import Profile from './pages/Profile';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Checkout from './pages/Checkout';
@@ -25,13 +26,12 @@ function App() {
   <Route path="/" element={<Home />} />
   <Route path="/shop" element={<Shop />} />
   <Route path="/checkout" element={<Checkout />} />
-  {/* 2. Add this new Route line */}
   <Route path="/product/:id" element={<ProductDetails />} />
-
   <Route path="/cart" element={<Cart />} />
   <Route path="/login" element={<Login />} />
   <Route path="/admin" element={<AdminDashboard />} />
   <Route path="/my-orders" element={<MyOrders />} />
+  <Route path="/profile" element={<Profile />} />
 </Routes>
 </main>
       {/* 3. Footer at the bottom */}

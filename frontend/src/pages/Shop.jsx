@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import SearchFilter from '../components/SearchFilter';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 
 const Shop = () => {
   const [books, setBooks] = useState([]);
@@ -14,21 +16,13 @@ const Shop = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5001/api/books');
+        const { data } = await axios.get(`${API_BASE_URL}/api/books`);
         setBooks(data);
         setFilteredBooks(data);
         
         // Get unique categories
-        const uniqueCategories = ['All', ...new Set(data.map(book => book.category))];
+        const uniqueCategories = [...new Set(data.map(book => book.category))];
         setCategories(uniqueCategories);
-        
-        // Check for category filter from URL
-        const urlParams = new URLSearchParams(location.search);
-        const categoryParam = urlParams.get('category');
-        if (categoryParam) {
-          setSelectedCategory(categoryParam);
-          setFilteredBooks(data.filter(book => book.category === categoryParam));
-        }
         
         setLoading(false);
       } catch (error) {
@@ -40,13 +34,46 @@ const Shop = () => {
     fetchBooks();
   }, [location]);
 
-  const handleCategoryFilter = (category) => {
-    setSelectedCategory(category);
-    if (category === 'All') {
+  const handleSearch = (searchTerm) => {
+    if (!searchTerm) {
       setFilteredBooks(books);
-    } else {
-      setFilteredBooks(books.filter(book => book.category === category));
+      return;
     }
+    const filtered = books.filter(book => 
+      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.author.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredBooks(filtered);
+  };
+
+  const handleFilter = ({ category, priceRange, sortBy }) => {
+    let filtered = [...books];
+
+    // Category filter
+    if (category) {
+      filtered = filtered.filter(book => book.category === category);
+    }
+
+    // Price filter
+    if (priceRange.min) {
+      filtered = filtered.filter(book => book.price >= parseInt(priceRange.min));
+    }
+    if (priceRange.max) {
+      filtered = filtered.filter(book => book.price <= parseInt(priceRange.max));
+    }
+
+    // Sort
+    if (sortBy === 'price-low') {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-high') {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'name') {
+      filtered.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortBy === 'rating') {
+      filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    }
+
+    setFilteredBooks(filtered);
   };
 
   if (loading) return <div className="text-center py-20"><h2>Loading Books...</h2></div>;
@@ -57,24 +84,12 @@ const Shop = () => {
         Shop Books
       </h2>
 
-      {/* Category Filter */}
-      <div className="mb-8">
-        <div className="flex flex-wrap justify-center gap-2">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => handleCategoryFilter(category)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                selectedCategory === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Search & Filter */}
+      <SearchFilter 
+        onSearch={handleSearch}
+        onFilter={handleFilter}
+        categories={categories}
+      />
 
       {/* Books Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -85,7 +100,7 @@ const Shop = () => {
       
       {filteredBooks.length === 0 && !loading && (
         <div className="text-center py-20">
-          <h3 className="text-xl text-gray-600">No books found in this category</h3>
+          <h3 className="text-xl text-gray-600">No books found</h3>
         </div>
       )}
     </div>

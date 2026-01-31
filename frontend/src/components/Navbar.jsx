@@ -28,7 +28,10 @@ const Navbar = () => {
             <Link to="/" className="hover:text-blue-600 transition">Home</Link>
             <Link to="/shop" className="hover:text-blue-600 transition">Shop</Link>
             {!user?.isAdmin && (
-              <Link to="/my-orders" className="hover:text-blue-600 transition">My Orders</Link>
+              <>
+                <Link to="/my-orders" className="hover:text-blue-600 transition">My Orders</Link>
+                <Link to="/profile" className="hover:text-blue-600 transition">Profile</Link>
+              </>
             )}
             {user?.isAdmin && (
               <Link to="/admin" className="hover:text-blue-600 transition">Admin</Link>
