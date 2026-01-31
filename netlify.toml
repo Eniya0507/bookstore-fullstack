@@ -4,4 +4,4 @@
   publish = "dist"
 
 [build.environment]
-  VITE_API_URL = "https://bookstore-fullstack-1.onrender.com"
+  VITE_API_URL = "https://bookstore-fullstack-2.onrender.com"
